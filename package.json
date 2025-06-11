@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@azure-rest/ai-inference": "latest",
+    "@azure/core-auth": "latest",
+    "@azure/core-sse": "latest",
+    "dotenv": "^16.5.0",
+    "node-fetch": "^3.3.2"
+  }
+}
