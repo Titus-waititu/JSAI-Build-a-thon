@@ -1,0 +1,143 @@
+/* General Styles */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+  color: #222;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+h1 {
+  text-align: center;
+  font-size: 3em;
+  margin: 30px 0 10px;
+  color: #1a237e;
+  letter-spacing: 2px;
+  text-shadow: 1px 2px 8px #b3c6ff;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2em;
+  margin: 20px 0 10px;
+  color: #3949ab;
+  letter-spacing: 1px;
+}
+
+p {
+  text-align: center;
+  font-size: 1.1em;
+  margin: 10px 0;
+  color: #607d8b;
+}
+
+/* Product Categories */
+.category {
+  margin: 40px 30px;
+  padding: 20px 0 10px 0;
+  border-bottom: 2px solid #90caf9;
+}
+
+/* Product Items Layout */
+.items {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* Individual Product Items */
+.item {
+  text-align: center;
+  width: 320px;
+  padding: 28px 18px 22px 18px;
+  margin: 18px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #ffffff 60%, #e3f2fd 100%);
+  box-shadow: 0 6px 24px rgba(30, 60, 90, 0.13);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.item:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 12px 32px rgba(30, 60, 90, 0.18);
+}
+
+/* Product Images */
+img {
+  max-width: 90%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+/* Product Titles */
+h3 {
+  font-size: 1.45em;
+  color: #283593;
+  margin: 10px 0 6px 0;
+  font-weight: 600;
+}
+
+/* Product Prices */
+.price {
+  font-size: 1.2em;
+  color: #00b894;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Button Styles */
+.button,
+button,
+input[type="submit"] {
+  background: linear-gradient(90deg, #42a5f5 0%, #478ed1 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+.button:hover,
+button:hover,
+input[type="submit"]:hover {
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 900px) {
+  .items {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .item {
+    width: 95%;
+    margin: 18px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  .item {
+    padding: 14px 6px 12px 6px;
+  }
+}
