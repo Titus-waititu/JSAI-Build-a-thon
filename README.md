@@ -1,229 +1,134 @@
 
 
 
-# 🤖 Quest: I want to build a local Gen AI prototype
+# ☁️ Quest: I want to move my AI prototype to Azure 
 
 > To reset your progress and select a different quest, click this button:
 >
-> [![Reset Progress](https://img.shields.io/badge/Reset--Progress-ff3860?logo=mattermost)](../../issues/new?title=Reset+Progress:+Back+to+Welcome&labels=reset&body=🔄+I+want+to+reset+my+progress+and+go+back+to+the+Welcome+page.%0A%0A**Please+wait+about+15+seconds.+Your+progress+will+be+reset,+this+issue+will+automatically+close,+and+you+will+be+taken+back+to+the+Welcome+page+to+select+a+new+quest.**)
+> [![Reset Progess](https://img.shields.io/badge/Reset--Progress-ff3860?logo=mattermost)](../../issues/new?title=Reset+Quest&labels=reset-quest&body=🔄+I+want+to+reset+my+AI+learning+quest+and+start+from+the+beginning.%0A%0A**Please+wait+about+15+seconds.+Your+progress+will+be+reset,+this+issue+will+automatically+close,+and+you+will+be+taken+back+to+the+Welcome+step+to+select+a+new+quest.**)
 
 ## 📋 Pre-requisites
 
 1. A GitHub account
 2. [Visual Studio Code](https://code.visualstudio.com/) installed
 3. [Node.js](https://nodejs.org/en) installed
+4. An Azure subscription. Use the [free trial](https://azure.microsoft.com/free/) if you don't have one, or [Azure for Students](https://azure.microsoft.com/free/students/) if you are a student.
 
 ## 📝 Overview
-You will build a **local Gen AI prototype** using JavaScript and TypeScript. This prototype will allow you to experiment with different AI models, parameters, and prompts.
 
-## 🧠 GitHub Models
+In this step, you will learn how to deploy your AI model to Azure AI Foundry after testing it locally with GitHub Models.
 
-GitHub Models is a FREE service that provides access to a variety of AI models from different providers and a playground to experiment with them. You can use these models to build your own AI applications (prototypes), or just to learn more about how AI works.
+### Assumption ⚠️
 
-With GitHub Models, you can use GitHub Personal Access Tokens (PAT) to authenticate and access the models locally, or use a single API key to access all the models.
+- You have already completed the previous steps in this project and have opened the **model playground on GitHub Models.**
 
-1. Right click [GitHub Models](https://github.com/marketplace/models) and open in a new tab
+> [!IMPORTANT]  
+> If you have done the previous quest, ensure you pull your changes from GitHub using `git pull` before continuing with this project to update the project README.
 
-> [!NOTE]  
-> Open the link IN A NEW TAB so you can keep this page open for reference. You can use the _Split Screen_ feature on Edge to have this instructions and GitHub Models/ VS Code open side-by-side
+## 🧠 GitHub Models to Azure AI Foundry
+> [!Note]
+> The following steps on GitHub Models should be in A SEPARATE BROWSER TAB. Keep this tab open for reference.
 
-2. Click on **explore the full model catalog** to see the available models.
+1. On the separate tab on the GitHub models playground, click on **Use this model** and select **Language: JavaScript** and **SDK: Azure AI Inference  SDK**. 
 
-    ![GH Models full catalog](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ghm-full-catalog.png?raw=true)
+   ![Use model](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/use-this-model-button.png?raw=true)
 
-    You will see a broad range of models listed in the catalog.
+2. Under **Create a personal access token**, select **Get production key** and this will take you to ai.azure.com and prompt you to:-
+   - Sign in to your Azure account
+   - Select your Azure subscription 
+   - Deploy model
 
-    🤔 _But which model should you use for what?_
+      ![Select subscription](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ai-foundry-select-subscription.png?raw=true)
 
-3. Scroll down to the **Filter section** to see the available filters. You can filter the models by:
-    - **Publisher:** Cohere, DeepSeek, Meta, Mistral AI, Microsoft _(research)_, Azure OpenAI Service, and more.
-    - **Category:** Conversation _(models optimized for dialogue use cases)_, Agents, Multimodal _(models capable of processing input in multiple formats - audio, visual etc.)_, Reasoning, and more.
+3. The model you selected will be pre-populated in the **Deployment name** field. You can optionally click on **Customize** to change the default configuration on deployment type, model version, tokens per minute (TPM) rate limit etc.
 
-4. Select a model from the list to open the model card. The model card provides detailed information about the model, and may include:
-    
-    ### A. README
-    - **Model Abstract:** A brief description of the model and its capabilities.
-    - **Model Architecture:** The data used to train the model and their modalities for input and output _(text-image pairs)_, the model size _(parameters)_, model context length _(how much text the model can process at once)_, training date _(knowledge cut-off date/data freshness for the model)_, supported languages,  and more.
-  
-      ![Model Architecture](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-readme.png?raw=true)
+      ![Customize model for deployment](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/deploy-model.png?raw=true)
 
-    ### B. Transparency Note
-    - **Model Use cases:** Primary and out-of-scope use cases for the model, responsible AI considerations, content filtering configurations and more.
-  
-      ![Model Transparency notice](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-transparency-notice.png?raw=true)
+## 🧰 AI Foundry VS Code Extension
 
-    ### C. License 
-    - **Model License:** The license under which the model is released, including any restrictions on use or distribution.
+To continue working with your deployed model in VS Code, you will need to install the AI Foundry VS Code extension, which will allow you to deploy and manage models in Azure AI Foundry without leaving your IDE.
 
-      ![Model License notice](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-license.png?raw=true)
+1. Click on the **Extensions** icon in the left sidebar of Visual Studio Code, search for **Azure AI Foundry** and **install**.
 
-    ### D. Evaluation Report
-    - **Model Benchmarks:** A summary of the model's performance on various benchmarks, including accuracy, speed, and other relevant metrics.
-    - **Model Benchmarks:** A list of benchmarks used to evaluate the model's performance, including details on how the model performed on each benchmark. Metrics may include:
-      - MMLU Pass@1 (Measuring Massive Multitask Language Understanding) - _Knowledge and reasoning across science, math, and humanities_.
-      - DROP - _Measures reading comprehension and numerical reasoning capabilities_
-      - among others
+2. Once installed, click on the **AI Foundry** icon in the left sidebar and click on **Set Default Project**. Select your project and expand the **Models** section. You should see your deployed model(s) listed there.
 
-      ![Model Evaluation](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-evaluation.png?raw=true)
+      ![Set default project](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/set-default-project.png?raw=true)
 
-5. After selecting a model and reviewing the model card, you can use the **Playground** to experiment with the model. The playground provides a user-friendly interface for testing the model's capabilities and understanding how it works.
+3. Click on the model name to open the model details view, where you can see the model's metadata, including the model version, deployment status, and TPM rate limit.
 
-    ![Playground button](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-playground-button.png?raw=true)
+      ![List of models](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-list.png?raw=true)
 
-    You can directly send questions (prompts) to the model and see how it responds. Throughout the session, you can monitor the token usage and the model's response time at the top of the chat UI.
+4. Right click on your model and select **Open in Playground**. This will open a tab in VS Code with a chat Playground, where you can test your deployed model.
 
-    ![Playground token usage note](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/playground-token-usage.png?raw=true)
+      ![AI Foundry playground](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ai-foundry-playground.png?raw=true)
 
-6. To check your token usage against your GitHub Models free quota (input/ output tokens, latency), click on the **Input: Output: Time** note at the top right of the chat UI to open Model usage insights.
+5. You can also use the **Compare** feature to compare the performance of your deployed model with other models for manual evaluation. Once you are happy with the performance of your deployed model, right click on the model and select **Open Code File**, then:
+   - Select **SDK**: Azure AI Inference SDK/ Azure OpenAI SDK
+   - Select **Language**: JavaScript
+   - Select **Authentication**: Key Authentication
 
-    ![Playground token usage card](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-usage-insights.png?raw=true)
+   The code to use your deployed model will be opened in a new tab. **Ensure you save the file as `ai-foundry.js` in your project folder.**
 
-7. Before going further, on the right side of the playground, switch from **Details** to **Parameters** to see the available parameters that you can adjust to change the model's behavior. 
-
-    ![Playground parameters](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/model-parameters.png?raw=true)
-
-    The parameters include:
-    - **Max Tokens:** The maximum number of tokens the model can generate in response to a prompt. Adjusting this parameter can help control the length of the model's output. 
-    - **Temperature:** Controls the randomness of the model's output. A higher temperature (e.g., 0.8) makes the output more random, while a lower temperature (e.g., 0.2) makes it more focused and deterministic.
-    - **Top P:** Controls the diversity of the model's output. A higher value (e.g., 0.9) allows for more diverse outputs, while a lower value (e.g., 0.1) makes the output more focused on the most likely tokens.
-    - **Presence Penalty:** Controls the model's tendency to repeat itself. A higher value (e.g., 1.0) discourages repetition, while a lower value (e.g., 0.0) allows for more repetition.
-    - **Frequency Penalty:** Similar to the penalty penalty, this parameter controls the model's tendency to repeat the same words or phrases. 
-    - **Stop:** A list of tokens that, when generated, will stop the model's output. 
-
-    You can continue interacting with the model in the playground, as you adjust the parameters to ensure you get the desired output.
-
-  🤔 _How do models compare across different prompts and parameters?_
-
-7. GitHub Models provides a **Compare** feature that allows you to compare the performance of different models on the same prompt. This is useful for understanding how different models respond to the same input and can help you choose the best model for your specific use case.
-
-    Click on the **Compare** button at the top right of the playground.
-
-    ![Compare](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/compare-button.png?raw=true)
-
-    Select the models you want to compare from the list of available models from the drop-down.
-
-    This will open a chat UI for the selected models side by side, and your prompt will be sent to both models. 
-
-    ![Compare chat example](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/compare-chat.png?raw=true)
-
-    In the example provided, you can compare the performance of a reasoning model and a conversation model on the same prompt to understand their strengths and limitations.
-
-## 👨‍💻 Playground to VS Code
-
-Now that you have a better understanding of the models from the GitHub Models playground, let's look at how to use them in JavaScript code.
-
-### Clone the repository
-
-1. Clone the repository to your local machine using the following command:
-
-    ```bash
-    git clone <your-repo-url>
-    ```
-    Replace `<your-repo-url>` with the URL of your GitHub repository.
-
-2. Open the cloned repository in Visual Studio Code.
+6. Create a `.env` file in your project folder and update it with the following environment variables:
 
    ```bash
-   cd <your-repo-name>
-   code .
+   AZURE_INFERENCE_SDK_KEY=your_api_key
+   AZURE_INFERENCE_SDK_ENDPOINT=your_api_endpoint
    ```
-   Replace `<your-repo-name>` with the name of your cloned repository.
+   
+   You can copy the API key and endpoint either from the model details page or right click on the model and select **Copy API Key/ Copy Endpoint**.
 
-### Get sample code
+   > **Important ⚠️**
+   >
+   > Create a `.gitignore` file in your project folder and add the `.env` file to it to prevent it from being pushed to GitHub. This is important for security reasons, as the `.env` file contains sensitive information such as your API key.
 
-1. On the far right, click on **Use this model** and select **Language: JavaScript** and **SDK: Azure AI Inference SDK**. 
+7. Open your terminal and run `npm install dotenv` to install the `dotenv` package, which will allow you to load environment variables from the `.env` file.
 
-    ![Use model](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/use-this-model-button.png?raw=true)
+   Add the following code to the top of your `ai-foundry.js` file to load the environment variables:
 
-    Follow the instructions provided to:
-    - Get a free developer key, (Personal Access Token (classic)) and store it in an environment variable either using bash, PowerShell or command line.
-    - Install dependencies 
-    - Run basic code sample. **Ensure your local file is named `sample.js`**
+   ```javascript
+   import dotenv from 'dotenv';
 
-      ![Run node sample file](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/node-sample.png?raw=true)
+   dotenv.config();
+   ```
 
-## 📌 Exercise: Convert a hand-drawn sketch to a web page
+8. Finally, run `node ai-foundry.js` and observe the output in the terminal. You should see the response from your deployed model.
 
-1. Download the contoso website hand-drawn sketch from [this link](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/contoso_layout_sketch.jpg), _(right click and open in new tab)_. and save it `contoso_layout_sketch.jpg` in the same directory as your `sample.js` file.
+   ![AI Foundry sample code](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/run-ai-foundry-sample.png?raw=true)
 
-    > **Note**
-    >
-    > If you aren't using a muiltimodal model, swap out the `modelName` in the code sample with a multimodal model of your choice. You can find a list of multimodal models in the GitHub Models catalog.
 
-  2. Update the code to pass the image to the model as input.
-
-      > **Note**
-      > You can use [GitHub Copilot](https://github.com/features/copilot) to help you with this task.
-      >
-      > ![Update code with GitHub Copilot](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/github-copilot.png?raw=true)
-
-  3. Run the code and check the output in the console.
-
-      ![Run sample passing image](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/run-sample-for-code.png?raw=true)
-
-## 🧰 Use AI Toolkit in VS Code
-
-The AI Toolkit in Visual Studio Code is a powerful extension that provides a set of tools and features to help you build AI applications more efficiently. 
-
-1. Click on the **Extensions** icon in the left sidebar of Visual Studio Code, search for **AI Toolkit** and **install**.
-
-2. Similar to GitHub Models, with the AI Toolkit now installed, you can browse through the catalog of available models, and use the **Playground** to experiment with the models, all on VS Code.
-
-    ![AI Toolkit catalog](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ai-toolkit.png?raw=true)
-
-    Let's execute the exercise above using the AI Toolkit in VS Code.
-
-3. Select a multimodal model from the catalog and open the **Playground**.
-
-    In the playground, upload the `contoso_layout_sketch.jpg` image and enter a prompt to write the HTML code for the website.
-
-4. On the generated code, click on the **New file** icon to copy the generated code into a new file. Save it as `index.html` in the same directory as your `sample.js` file.
-
-    ![AI Toolkit -html](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ai-toolkit-html.png?raw=true)
-
-    Do the same for the CSS code and save it as `style.css` in the same directory.
-
-    You can preview the generated code and iterate on the code to improve it (optionally using GitHub Copilot).
-
-    ![AI Toolkit - html preview](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/html-preview.png?raw=true)
-
-## ✅ Activity: Push `sample.js` code to your repository
+## ✅ Activity: Push `ai-foundry.js` code to your repository
 
 ### Quest Checklist
 
 To complete this quest and **AUTOMATICALLY UPDATE** your progress, you MUST push your code to the repository as described below.
 
 **Checklist**
-- [ ] Have a `sample.js` file at the root of your project
-- [ ] The file MUST include a reference to your GITHUB_TOKEN environment variable
+
+- [ ] Have a `ai-foundry.js` file at the root of your project
+- [ ] The file MUST include a call to the `chat/completion` endpoint of your deployed model
 
 1. In the terminal, run the following commands to add, commit, and push your changes to the repository:
 
     ```bash
     git add .
-    git commit -m "Working with GitHub Models and AI Toolkit"
+    git commit -m "Connect to Azure AI Foundry"
     git push
     ```
 
 2.  After pushing your changes, **WAIT ABOUT 15 SECONDS FOR GITHUB ACTIONS TO UPDATE YOUR README**.
 
-    
 > To skip this quest and select a different one, click this button:
 >
-> [![Skip to another quest](https://img.shields.io/badge/Skip--to--another--quest-ff3860?logo=mattermost)](../../issues/new?title=Skip+Quest:+Back+to+Welcome&labels=reset&body=🔄+I+want+to+skip+this+quest+and+go+back+to+the+Welcome+page.%0A%0A**Please+wait+about+15+seconds.+Your+progress+will+be+reset,+this+issue+will+automatically+close,+and+you+will+be+taken+back+to+the+Welcome+page+to+select+a+new+quest.**)
+> [![Skip to another quest](https://img.shields.io/badge/Skip--to--another--quest-ff3860?logo=mattermost)](../../issues/new?title=Skip+quest&labels=reset-quest&body=🔄+I+want+to+reset+my+AI+learning+quest+and+start+from+the+beginning.%0A%0A**Please+wait+about+15+seconds.+Your+progress+will+be+reset,+this+issue+will+automatically+close,+and+you+will+be+taken+back+to+the+Welcome+step+to+select+a+new+quest.**)
 
 ## 📚 Further Reading
 
-Here are some additional resources to help you learn more about experimenting with AI models and building prototypes:
+Here are some additional resources to help you learn more about getting started with Azure AI Foundry and deploying models:
 
-- [About GitHub Models](https://docs.github.com/en/github-models/about-github-models)
-- [Choosing the right AI model for your task](https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task)
-- [Introducing GitHub Models: A new generation of AI engineers building on GitHub](https://github.blog/news-insights/product-news/introducing-github-models/)
-- [📹 DEM500: Prototype, build, and deploy AI apps quickly with GitHub Models](https://build.microsoft.com/en-US/sessions/DEM500?source=sessions)
-- [What is the AI Toolkit for Visual Studio Code?](https://learn.microsoft.com/en-us/windows/ai/toolkit/)
-- [Lesson 1: Introduction to Generative AI and LLMs for JavaScript Developers](https://github.com/microsoft/generative-ai-with-javascript/tree/main/lessons/01-intro-to-genai#lesson-1-introduction-to-generative-ai-and-llms-for-javascript-developers)
-- [Lesson 2: Writing your first AI app](https://github.com/microsoft/generative-ai-with-javascript/blob/main/lessons/02-first-ai-app/README.md#lesson-2-writing-your-first-ai-app)
-- [Lesson 3: Prompt Engineering](https://github.com/microsoft/generative-ai-with-javascript/blob/main/lessons/03-prompt-engineering/README.md)
+- [Azure AI Foundry Extension for Visual Studio Code is Available in Preview](https://devblogs.microsoft.com/foundry/azure-ai-foundry-vscode-extension-preview/)
+- [Work with the Azure AI Foundry for Visual Studio Code extension docs](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/get-started-projects-vs-code)
+- [📹 BRK107: Develop, Build and Deploy LLM Apps using GitHub Models and Azure AI Foundry](https://build.microsoft.com/en-US/sessions/BRK107?source=sessions)
 - [Microsoft AI Tools Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-windows-ai-studio.microsoft-ai-tools-pack), a curated set of essential extensions for building generative AI applications and agents in VS Code
 
 
