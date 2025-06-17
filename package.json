@@ -4,7 +4,10 @@
     "@azure-rest/ai-inference": "latest",
     "@azure/core-auth": "latest",
     "@azure/core-sse": "latest",
+    "@langchain/azure-openai": "^0.0.11",
+    "@langchain/openai": "^0.5.13",
     "dotenv": "^16.5.0",
+    "langchain": "^0.3.28",
     "sharp": "^0.34.2"
   }
 }
