@@ -9,8 +9,9 @@ import { dirname } from "path";
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { BufferMemory } from "langchain/memory";
 import { ChatMessageHistory } from "langchain/stores/message/in_memory";
-// ------------------------------------------------
+import { AgentService } from "./agentService.js";
 
+// Load env variables
 dotenv.config();
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 const sessionMemories = {};
+const agentService = new AgentService();
 
 function getSessionMemory(sessionId) {
   if (!sessionMemories[sessionId]) {
@@ -38,9 +40,9 @@ const pdfPath = path.join(projectRoot, "data/employee_handbook.pdf");
 
 const chatModel = new AzureChatOpenAI({
   azureOpenAIApiKey: process.env.AZURE_INFERENCE_SDK_KEY,
-  azureOpenAIApiInstanceName: process.env.INSTANCE_NAME, // In target url: https://<INSTANCE_NAME>.services...
-  azureOpenAIApiDeploymentName: process.env.DEPLOYMENT_NAME, // i.e "gpt-4o"
-  azureOpenAIApiVersion: "2024-08-01-preview", // In target url: ...<VERSION>
+  azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
+  azureOpenAIApiDeploymentName: process.env.DEPLOYMENT_NAME,
+  azureOpenAIApiVersion: "2024-08-01-preview",
   temperature: 1,
   maxTokens: 4096,
 });
@@ -68,6 +70,7 @@ async function loadPDF() {
       currentChunk = word;
     }
   }
+
   if (currentChunk) pdfChunks.push(currentChunk);
   return pdfText;
 }
@@ -75,11 +78,12 @@ async function loadPDF() {
 function retrieveRelevantContent(query) {
   const queryTerms = query
     .toLowerCase()
-    .split(/\s+/) // Converts query to relevant search terms
+    .split(/\s+/)
     .filter((term) => term.length > 3)
     .map((term) => term.replace(/[.,?!;:()"']/g, ""));
 
   if (queryTerms.length === 0) return [];
+
   const scoredChunks = pdfChunks.map((chunk) => {
     const chunkLower = chunk.toLowerCase();
     let score = 0;
@@ -90,6 +94,7 @@ function retrieveRelevantContent(query) {
     }
     return { chunk, score };
   });
+
   return scoredChunks
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score)
@@ -97,51 +102,67 @@ function retrieveRelevantContent(query) {
     .map((item) => item.chunk);
 }
 
+// ============================================
+//              CHAT ROUTE LOGIC
+// ============================================
+
 app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
-  const useRAG = req.body.useRAG === undefined ? true : req.body.useRAG;
   const sessionId = req.body.sessionId || "default";
+  const useRAG = req.body.useRAG !== false;
+  const mode = req.body.mode || "basic";
 
-  const memory = getSessionMemory(sessionId);
-  const memoryVars = await memory.loadMemoryVariables({});
-
-  let sources = [];
-
-  // Load RAG sources if enabled
-  if (useRAG) {
-    await loadPDF();
-    sources = retrieveRelevantContent(userMessage);
+  // 🔁 Agent mode override
+  if (mode === "agent") {
+    try {
+      const agentResponse = await agentService.processMessage(sessionId, userMessage);
+      return res.json({
+        reply: agentResponse.reply,
+        sources: [],
+      });
+    } catch (err) {
+      console.error("Agent error:", err);
+      return res.status(500).json({
+        error: "Agent processing failed",
+        reply: "Sorry, the agent failed to respond.",
+      });
+    }
   }
 
-  // Create system prompt
-  const systemMessage = useRAG
-    ? {
-        role: "system",
-        content:
-          sources.length > 0
-            ? `You are a very helpful assistant for Contoso Electronics. Use ONLY the following excerpts to answer:\n\n--- EMPLOYEE HANDBOOK EXCERPTS ---\n${sources.join(
-                "\n\n"
-              )}\n--- END OF EXCERPTS ---`
-            : `You are a helpful assistant for Contoso Electronics. The excerpts do not contain relevant information for this question. Reply politely: "I'm sorry, I don't know. The employee handbook does not contain information about that."`,
-      }
-    : {
-        role: "system",
-        content:
-          "You are a helpful and knowledgeable assistant. Answer the user's questions concisely and informatively.",
-      };
-
-  // Combine system + memory + current message
-  const messages = [
-    systemMessage,
-    ...(memoryVars.chat_history || []),
-    { role: "user", content: userMessage },
-  ];
-
   try {
-    // Call the model
+    const memory = getSessionMemory(sessionId);
+    const memoryVars = await memory.loadMemoryVariables({});
+
+    let sources = [];
+
+    if (useRAG) {
+      await loadPDF();
+      sources = retrieveRelevantContent(userMessage);
+    }
+
+    const systemMessage = useRAG
+      ? {
+          role: "system",
+          content:
+            sources.length > 0
+              ? `You are a very helpful assistant for Contoso Electronics. Use ONLY the following excerpts to answer:\n\n--- EMPLOYEE HANDBOOK EXCERPTS ---\n${sources.join(
+                  "\n\n"
+                )}\n--- END OF EXCERPTS ---`
+              : `You are a helpful assistant for Contoso Electronics. The excerpts do not contain relevant information for this question. Reply politely: "I'm sorry, I don't know. The employee handbook does not contain information about that."`,
+        }
+      : {
+          role: "system",
+          content: "You are a helpful and knowledgeable assistant.",
+        };
+
+    const messages = [
+      systemMessage,
+      ...(memoryVars.chat_history || []),
+      { role: "user", content: userMessage },
+    ];
+
     const response = await chatModel.invoke(messages);
 
-    // Save chat context
     await memory.saveContext(
       { input: userMessage },
       { output: response.content }
@@ -161,7 +182,11 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+// ============================================
+//                  SERVER START
+// ============================================
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`AI API server running on port ${PORT}`);
+  console.log(`✅ AI API server running on port ${PORT}`);
 });

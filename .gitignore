@@ -162,7 +162,8 @@ nCrunchTemp_*
 # MightyMoose
 *.mm.*
 AutoTest.Net/
-
+#agent file
+my-agent.agent.yaml
 # Web workbench (sass)
 .sass-cache/
 

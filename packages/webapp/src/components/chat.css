@@ -52,7 +52,44 @@
     border-radius: 18px;
     animation: fadeIn 0.3s ease-in-out;
 }
+.mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  background: rgba(50,50,50,0.5);
+  padding: 6px 12px;
+  border-radius: 18px;
+  margin-right: auto;
+}
 
+.mode-selector label {
+  color: #e0e0e0;
+  white-space: nowrap;
+}
+
+.mode-selector select {
+  background: #18191a;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.mode-selector select:focus {
+  border-color: #1e90ff;
+}
+
+.rag-toggle.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rag-toggle.disabled input[type="checkbox"] {
+  cursor: not-allowed;
+}
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
