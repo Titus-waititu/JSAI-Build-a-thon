@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "packages/**"
+      - "packages/"
     branches:
       - main
 
@@ -30,16 +30,15 @@ jobs:
 
     if: >-
       ${{ !github.event.repository.is_template
-          && needs.get_current_step.outputs.current_step == 7 }}
+          && needs.get_current_step.outputs.current_step == '7' }}
 
     runs-on: ubuntu-latest
 
     steps:
-      # We'll need to check out the repository to verify the agent directory exists
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Let's get all the branches
+          fetch-depth: 0
 
       - name: Check node-os-mcp directory exists
         id: check_node-os-mcp
@@ -51,7 +50,7 @@ jobs:
           fi
 
       - name: Update to step 8
-        if: steps.check_node-os-mcp.outputs.node-os-mcp_exists == 'true'
+        if: steps.check_node-os-mcp.outputs.agent_exists == 'true'
         uses: skills/action-update-step@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
