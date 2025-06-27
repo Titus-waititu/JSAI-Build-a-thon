@@ -1,3 +1,8 @@
+// Check for required environment variables
+if (!env.GITHUB_TOKEN) {
+  throw new Error("GITHUB_TOKEN environment variable is required");
+}
+
 const changes = await git.diff({ staged: true });
 
 defDiff("CODE_CHANGES", changes);
