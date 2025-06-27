@@ -1,8 +1,11 @@
-# Weather MCP Server
+# Node OS MCP Server
 
-This is a sample MCP Server in TypeScript implementing weather tools with mock responses. It can be used as a scaffold for your own MCP Server. It includes the following features: 
+This is an MCP Server in TypeScript implementing operating system information tools. It provides real-time OS data and can be used for system monitoring. It includes the following features: 
 
-- **Weather Tool**: A tool that provides mocked weather information based on the given location.
+- **CPU Usage Tool**: A tool that provides average CPU usage percentage.
+- **Hostname Tool**: A tool that provides the system hostname.
+- **Architecture Tool**: A tool that provides the system architecture.
+- **Uptime Tool**: A tool that provides system uptime in seconds.
 - **Connect to Agent Builder**: A feature that allows you to connect the MCP server to the Agent Builder for testing and debugging.
 - **Debug SSE in MCP Inspector**: A feature that allows you to debug the MCP Server using the MCP Inspector.
 - **Debug STDIO in MCP Inspector**: A feature that allows you to debug the MCP Server using the MCP Inspector.
