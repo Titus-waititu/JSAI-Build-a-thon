@@ -1,111 +1,124 @@
 
 
-# ⚙️ Quest: I want to automate code reviews
+# ⚡️ Quest: I want a Production-Ready Template to customize
 
 > To reset your progress and select a different quest, click this button:
 >
-> [![Reset Progess](https://img.shields.io/badge/Reset--Progress-ff3860?logo=mattermost)](../../issues/new?title=Reset+Quest&labels=reset-quest&body=🔄+I+want+to+reset+my+AI+learning+quest+and+start+from+the+beginning.%0A%0A**Please+click+on+Create+below,+then+wait+about+15+seconds.+Your+progress+will+be+reset,+this+issue+will+automatically+close,+and+you+will+be+taken+back+to+the+Welcome+step+to+select+a+new+quest.**)
+> [![Reset Progess](https://img.shields.io/badge/Reset--Progress-ff3860?logo=mattermost)](../../issues/new?title=Reset+Quest&labels=reset-quest&body=🔄+I+want+to+reset+my+AI+learning+quest+and+start+from+the+beginning.%0A%0A**Please+wait+about+15+seconds.+Your+progress+will+be+reset,+this+issue+will+automatically+close,+and+you+will+be+taken+back+to+the+Welcome+step+to+select+a+new+quest.**)
 
 ## 📋 Pre-requisites
 
 1. A GitHub account
 2. [Visual Studio Code](https://code.visualstudio.com/) installed
 3. [Node.js](https://nodejs.org/en) installed
+4. An Azure subscription. Use the [free trial](https://azure.microsoft.com/free/) if you don't have one, or [Azure for Students](https://azure.microsoft.com/free/students/) if you are a student.
+5. [Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-windows) installed
 
 ## 📝 Overview
 
 > [!IMPORTANT]  
 > If you have done the previous quest, ensure you pull your changes from GitHub using `git pull` before continuing with this project to update the project README.
 
-You will build an **automated code review system** that uses AI to analyze code changes and provide feedback. This system will help you ensure that your code meets the quality standards best practices of your project, while also learning how to use AI to automate some of your development tasks.
+Throughout all quests in this project, you have been following a minimalistic approach to building functional AI applications. However, in today's fast-paced world of technology, building robust production-ready AI solutions demands the use of the right tools and frameworks, and adoption of industry best practices.
 
-## 🧠 Use GenAIScript in VS Code
+This can be a daunting task, often requiring:-
+- Too many decisions to make
+- Difficulty in identifying and implementing shifting industry best practices
+- Need for repeatable and scalable solutions
+- Familiarity with the latest tools, services, and frameworks
 
-[GenAIScript](https://microsoft.github.io/genaiscript/) is an extension of the JavaScript language that allows you to write scripts that can interact with AI models. You can create advanced AI agents and workflows in very few lines of code, making it easier to build AI applications. It comes with a Command Line Interface (CLI) that allows you to run scripts, and a Visual Studio Code extension that provides an interactive editor for writing and running your scripts.
+To address these challenges, this quest introduces you azd-templates, a collection of production-ready templates that can be used to quickly build and deploy AI applications. These templates are designed to be easy to use and customizable, allowing you to focus on building your application rather than worrying about the underlying infrastructure.
 
-Let's start by installing the GenAIScript extension in Visual Studio Code:
+## 🧰 Azure Developer CLI (azd)
 
-1. Click on the **Extensions** icon in the left sidebar of Visual Studio Code, search for **GenAIScript** and **install**.
+The Azure Developer CLI (azd) is an open-source, developer-centric command-line (CLI) tool, part of a wider ecosystem to help you accelerate the provisioning and deployment of applications to Azure. Long gone are the many arguments and flags typically used, azd uses intuitive, developer-friendly commands that represent key development stages, boosting your overall productivity.
 
-2. After installation, you will see a new **GenAIScript** icon in the left sidebar and also in the status bar at the bottom of the window. Click on the **GenAIScript** icon in the status bar and select **Start GenAIScript server**.
+| azd command | Objective |
+|-------------|-------------|
+| `azd auth`  | Authenticate with Azure |
+| `azd init`  | Initializes a new project |
+| `azd package`  | Packages the application's code to be deployed to Azure. |
+| `azd provision`  | Provision the Azure resources for an application. |
+| `azd deploy`  | Deploy the application's code to Azure. |
+| `azd up`    | Provisions and deploys the application |
+| `azd down`  | Deletes the Azure resources for an application.
 
-3. It will take some time to start the server, as it first install all the required dependencies.
+## 📚 azd Templates
 
-### Set up GitHub token
+azd templates are a collection of application code (samples) and azd configuration files that can be used to quickly customize and deploy production-ready applications to Azure. 
 
-To use GenAIScript with GitHub Models, you need to set up a GitHub token.
+Each template includes:-
+- **Proof-of-concept (PoC) starter code** to help you kickstart your project without starting from scratch. These templates go beyond ‘hello-world’ examples, demonstrating how to build complex systems, allowing you to customize the code, or completely replace with your own,
+- Everything you need to get a **Fully managed end-to-end system/ application** running on Azure, with configuration files to handle one-click deployments,
+- **Reusable Infrastructure as Code (IaC) assets** to provision and maintain cloud services
 
-1. Open [this link](https://github.com/marketplace/models/azure-openai/gpt-4-1/playground) in a new tab and click on the **Use this model** button.
+With azd templates, you can: -
+- Focus on writing the best code and deployment infrastructure for your application all in one context
+- Quickly create prototypes and proof-of-concept applications, accelerating innovation
+- Learn industry best practices and patterns for building production-ready AI applications
 
-    ![Use model](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/use-gh-model.png?raw=true)
+## ✅ Activity: Browse through JS/TS AI Templates
 
-    Follow the instructions provided to get a free developer key, named Personal Access Token (classic).
+The key to identifying the right template for your project is to understand the requirements of your application. The templates are designed to be flexible and customizable, allowing you to choose the one that best fits your needs.
 
-2. Create a new file in your project root called `.env` and add the following line:
+Then:-
+1. Visit the [AI app template](https://azure.github.io/ai-app-templates/?tags=javascript&tags=typescript) gallery to browse through the available templates.
 
-    ```text
-    GITHUB_TOKEN=<your_github_token_here>
-    ```
+    ![AI App templates](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ai-templates.png?raw=true)
 
-## ✅ Activity: Create a code review script
+2. Once you have identified a template that meets your needs, click on it to view the details and find instructions on how to use it.
 
-Now that you have GenAIScript installed, let's create a script that will analyze code changes and provide feedback.
+    ![Gen AI chat frontend templates](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/genai-chat-frontend-template.png?raw=true)
 
-1. Create a new file in your project directory called `code-review.genai.js`.
+Some of the popular templates for JavaScript developers are:-
+- [Serverless GenAI assistant with LangChain](https://azure.github.io/ai-app-templates/repo/azure-samples/serverless-chat-langchainjs/)
+- [GenAI chat frontend including debug, restyle, and revisit](https://azure.github.io/ai-app-templates/repo/azure-samples/azure-openai-chat-frontend/)
+- [Build RAG apps with LlamaIndex](https://azure.github.io/ai-app-templates/repo/azure-samples/llama-index-javascript/)
+- [RAG chat with Azure AI Search + JavaScript](https://azure.github.io/ai-app-templates/repo/azure-samples/azure-search-openai-javascript/)
+- [Serverless GenAI assistant using function calling](https://azure.github.io/ai-app-templates/repo/azure-samples/azure-openai-assistant-javascript/)
 
-2. Open the file and add the following code:
-
-```javascript
-const changes = await git.diff({ staged: true });
-
-defDiff("CODE_CHANGES", changes);
-
-$`## Role
-You are a senior developer whose job is to review code changes and provide meaningful feedback.
-
-## Task
-Review <CODE_CHANGES>, point out possible mistakes or bad practices, and provide suggestions for improvement.
-- Be specific about what's wrong and why it's wrong
-- Reference proper coding standards and best practices
-- Be brief to get your point across
-`;
-```
-
-Let's break down what this script does:
-- It uses the `git.diff()` function to get the staged changes in your Git repository.
-- The `defDiff()` function defines a variable `CODE_CHANGES` that contains the code changes, to provide context to the AI model.
-- The `$` template literal is used to define the prompt AI model. It instructs the model to review the code changes, point out mistakes, and provide suggestions for improvement.
-
-### Test the code review script
-
-Open the terminal in Visual Studio Code and run the following command to add some changes to your Git repository:
-
-```bash
-git add .
-```
-
-Then while your `code-review.genai.js` file is open, select the **Run GenAIScript** button at the top right corner of the editor, or use the command palette (Ctrl+Shift+P) and type `GenAIScript: Run Script`.
-
-![Run GenAIScript button](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/run-genaiscript.png?raw=true)
-
-You should then see a new tab open with the AI's code review feedback. It should point out a few things since the model has no knowledge of GenAIScript here, but you can use this as a starting point. Experiment with tweaking the prompt to get more specific feedback based on your coding standards and practices.
-
+## ✅ Activity: Submit your customized project idea for community voting
 ### Quest Checklist
 
-To complete this quest and **AUTOMATICALLY UPDATE** your progress, you MUST push your code to the repository as described below.
+To complete this final challenge and unlock the true power of **AI + Cloud**, you'll pick a ready-made Azure Developer CLI (azd)/ AI template and customize it to solve a problem you care about.
 
 **Checklist**
-- [ ] Have a `code-review.genai.js` file at the root of your project
 
-1. In the terminal, run the following commands to add, commit, and push your changes to the repository:
+- [ ] Think of a problem that matters to you
 
-    ```bash
-    git add .
-    git commit -m "Add code review script"
-    git push
-    ```
+    This can be personal, societal, climate-related, educational — anything that gets you thinking creatively and purposefully.
 
-2.  After pushing your changes, **WAIT ABOUT 15 SECONDS FOR GITHUB ACTIONS TO UPDATE YOUR README**.
+- [ ] Browse the azd/ AI template gallery
+
+    Find a template that provides a strong starting point for solving your chosen problem. You can explore app types like:
+
+    - Gen AI copilots
+    - Chat-enabled apps
+    - Data summarizers
+    - RAG implementations
+    - Serverless APIs
+    - Full-stack web apps
+
+- [ ] Follow the setup instructions provided in your chosen template
+- [ ] Customize it to fit your vision
+    
+    Tweak the front end, update the backend, change the model, connect external data — anything goes. This is where your creativity and dev skills shine.
+
+- [ ] Push your code
+
+    Make sure your new project has a README.md explaining:
+
+    - The problem you’re solving
+    - Why you picked the template
+    - What customizations you made
+
+- [ ] Open a New Issue using the **🛠️ Project Submission - Build-a-thon** issue template
+- [ ] Encourage your peers to upvote your issue for the **People’s Choice spotlight**!
+
+    ⏳ After submission: Keep updating your project as you build. You can edit your issue to reflect new progress and keep your voters informed.
+    
+<!-- [![Complete Quest](https://img.shields.io/badge/Complete--Quest-ff3860?logo=esbuild)](/issues/new?title=Quest:+I+want+a+Production-Ready+Template+to+customize&labels=quest&body=🚀+I%27ve+browsed+through+the+AI+App+Template+gallery%21%0A%0A**After+you+click+on+Create+below,+wait+about+15+seconds.+This+issue+will+automatically+close,+and+the+README+will+update+with+your+next+instructions.**) -->
+
 
 > To skip this quest and select a different one, click this button:
 >
@@ -113,9 +126,9 @@ To complete this quest and **AUTOMATICALLY UPDATE** your progress, you MUST push
 
 ## 📚 Further Reading
 
-Here are some additional resources to help you learn more about GenAIScript:
+Here are some additional resources to help you learn more about the Azure Developer CLI (azd) and the templates available:
 
-- [More automation ideas with GenAIScript sample collection](https://microsoft.github.io/genaiscript/samples/)
-- [Learn about Generative AI with JavaScript on YouTube](https://aka.ms/genai-js)
+- [Kickstart JS/TS projects with azd Templates](https://techcommunity.microsoft.com/blog/azuredevcommunityblog/kickstart-projects-with-azd-templates/4295235)
+- [Kickstart your JavaScript projects with azd on YouTube](https://www.youtube.com/playlist?list=PLmsFUfdnGr3zzLIPdJsfdSwymIwOsyQ9Z)
 
 
