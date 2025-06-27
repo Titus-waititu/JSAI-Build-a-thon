@@ -1,6 +1,6 @@
 
 
-# 🤖 Quest: I want to build an AI Agent
+# 🔗 Quest: Create an AI Agent with Tools from an MCP Server
 
 > To reset your progress and select a different quest, click this button:
 >
@@ -17,470 +17,233 @@
 
 ## 📝 Overview
 
-In this step, you will learn how to build a basic AI agent using the AI Foundry VS Code extension. An AI agent is a program powered by AI models that can understand instructions, make decisions, and perform tasks autonomously.
-
-### Assumption ⚠️
-
-This step assumes you have already completed previous steps and that you have the Azure AI Foundry VS Code extension installed with a default project set up. If you haven't done so, please click the **Reset Progress** button above and start from the _Move AI prototype to Azure_ quest.
+This quest will guide you through the process of creating an AI Agent with tools from an MCP (Model Context Protocol) server using the AI Toolkit extension for Visual Studio Code. 
 
 > [!IMPORTANT]  
 > If you have done the previous quest, ensure you pull your changes from GitHub using `git pull` before continuing with this project to update the project README.
 
-## Step 1️⃣: Create an Agent
+## Step 1️⃣: Add a tool-compatible model
 
+You must first select a model from the model catalog that will power your agent. Note, that **not all models providers support tools**, so you need to ensure that the model you select is compatible with the tools you will use.
 
-**‼️IMPORTANT NOTE**
+1. Click on the **AI Toolkit** icon in the left sidebar to open the AI Toolkit view.
 
-Currently, agents are only supported in the following regions: **australiaeast, centraluseuap, eastus, eastus2, francecentral, japaneast, norwayeast, southindia, swedencentral, uksouth, westus, westus3**
+2. Under the **Catalog** tab, click on **Models** to discover the available models.
 
-At a later stage, you will add **bing grounding** to your agent, a service that works with **all Azure OpenAI models except _gpt-4o-mini, 2024-07-18_**. We therefore recommend using the _gpt-4o_ model for this quest.
+    Note, that **not all models providers support tools**, so you need to ensure that the model you select is compatible with the tools you will use. _Recommended providers include OpenAI and GitHub._
 
-If you used a different region, please [create a new Azure AI Foundry project](https://ai.azure.com/build), _(On the AI Foundry portal)_, in one of the supported regions and deploy a model, (gpt-4o), there.
+3. Click on the **Add** button next to the model you want to use. This will add the model to your workspace (My models).
 
-**‼️END OF NOTE**
+    ![Add model to workspace](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/add-to-my-models.png?raw=true)
 
-1.  **Update your working directory** 
+## Step 2️⃣: Create an agent
 
-    Create a new folder called `agent` in the `packages` directory of your project. This folder will contain the configuration files for your agent.
+The AI Tooklit extension provides a space where you can create and customize your own AI Agent, the **Agent (Prompt) Builder**. This is where you can define the behavior and personality of your agent, as well as the tools it can use.
 
-2.  **Create & configure an Agent** 
+1. Under the **Tools** tab, click on **Agent (Prompt) Builder** to open the agent builder view.
 
-    Click on the AI Foundry icon in the Activity Bar. Under resources, ensure your default AI Foundry project is selected. Hover over the "Agents" section title and click the "+" (Create Agent) icon that appears.
+    ![Agent builder](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/agent-builder.png?raw=true)
 
-    ![Create Agent Button](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/create-agent.png?raw=true)
+    - a. **Model** - You can select a model to power your agent from the **My models** tab. The **Settings** button next to it allows you to configure the model settings, such as temperature and max tokens.
+    - b. **Prompts** - Define the behavior and personality of your agent (System prompt) and where you pass the user input (User prompt). 
+    - c. **Variables** - Enter prompt that can include dynamic variables using the double brace syntax: {{variable}}.
+    - d. **Tools** - Select the tools you want your agent to use.
+    - e. **Structure output** - Define the output format of your agent's response. 
 
-    You'll be prompted to save the agent's configuration file. Assign the name `my-agent.agent.yaml` and save the file in the agents folder you created earlier. Once saved, the yaml file and the Agent Designer will open for you to configure your agent.
-    
-    **Security Note 🔐**
+2. Click the **+ New Builder** button. The extension will launch a setup wizard via the Command Palette. Enter the name **OS Patrol**
 
-    Add the `my-agent.agent.yaml` file to your `.gitignore` file to prevent it from being committed to your repository. This file will contain sensitive information such as your subscription ID and agent ID, which should not be shared publicly.
+3. Select the **Model** you added in Step 1 (or any other compatible model) from the dropdown list.
 
-    On the Agent Designer, 
-    - Give your agent a name. i.e `my-agent` _that will have been auto-populated for you._
-    - Enter a foundation model for your agent from your model list. This model will power the agent's core reasoning and language capabilities. _Example. gpt-4o_
-    - System instructions for your agent. This tells the agent how it should behave. Enter the following:
+4. For the **Prompts** section, enter the following `System prompt`
 
-      ```
-      You are a helpful agent who loves emojis 😊. Be friendly and concise in your responses.
-      ```
-    - Parameters, i.e _temparature: 0.7_ 
+    > You are a helpful agent that provides real-time updates and insights about the user's operating system.
 
-    The yaml configuration file should look like this:
-    
-      ````yaml
-      version: 1.0.0
-      name: my-agent
-      description: Description of the agent
-      id: ''
-      model:
-        id: gpt-4o
-        options:
-          temperature: 0.7
-          top_p: 1
-      instructions: >-
-        You are a helpful agent who loves emojis 😊. Be friendly and concise in your
-        responses.
-      tools: [] # We'll add tools later
-      ````
-3.  **Create Agent** 
+    _Note: The Agent Builder provides a **Generate system prompt** feature that you can use to describe the agent's intended behavior and personality, then have the model generate a system prompt for you._
 
-    Click on the **Create Agent on Azure AI Foundry** button in the Agent Designer to create and deploy your agent to Azure AI Foundry. Once created, the agent will pop up in the AI Foundry extension under the "Agents" section.
+5. For the **User prompt**, enter the following:
 
-    ![Deploy to Azure AI Foundry Button](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/deploy-to-ai-foundry.png?raw=true)
+    > What is my machine type?
 
-## Step 2️⃣: Test the Agent in the Playground
+    ![OS Patrol prompts](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/os-patrol-prompts.png?raw=true)
 
-Now that you've created and deployed your agent, you can test it in the Playground - an interface that allows you to interact with your agent and see how it responds to different inputs.
+6. Scroll down and leave the **Structure output** format as **text**, then click **Run** to test the agent. 
 
-1.  **Open the Playground** 
+    The agent will respond saying it doesn't have access to your system but will give you instructions on how to check your machine type.
 
-    Right-click on the agent you just created in the "Agents" section and select **Open Playground**. Alternatively, you can expand the "Tools" section and click on "Agent Playground", then select your agent from the list.
+    ![OS Patrol response no tools](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/os-patrol-no-tools.png?raw=true)
 
-    ![Agent Playground in tools](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/agent-playground-in-tools.png?raw=true)
+## Step 3️⃣: Add tools to your agent
 
-2.  **Test the Agent** 
+This next step is where you will add tools to your agent, allowing it to perform actions and access external data. You will build an MCP server that will expose the tools you want to use. 
 
-    In the Playground, you can start chatting with your agent. Try sending it a few messages to see how it responds. For example:
-    - "Hi there!" 
-    - Expect a friendly response with emojis 😎.
+1. On the **Tools** tab, click on **+ MCP Server**, then select the following
+    -  Add tools from MCP server: **+ Add Server**
 
-      ![Agent Playground](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/agent-playground.png?raw=true)
+        ![OS Patrol add server](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/add-server.png?raw=true)
 
-    - Then, try a prompt like _"What's the weather in Nairobi right now?"_
-    - Expect a response like "I can't check live weather, but you can check a weather website for the latest updates! 🌤️"
+    -  Select how you want to use MCP server: **Create a New MCP Server**
 
-      ![Agent Playground - weather response](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/agent-weather-response.png?raw=true)
+        ![OS Patrol create new server](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/create-new-server.png?raw=true)
 
-The agent currently has limitations including not being able to access real-time information or perform specific tasks. It can only respond based on the instructions and the model's knowledge.
+    -  Select an MCP Server template: **typescript-weather**
 
-So in the next step, we will add a tool to the agent to make it more useful.
+        ![OS Patrol server template](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/server-template.png?raw=true)
 
-## Step 3️⃣: Add a Tool to the Agent
+    -  Select a folder to save the MCP server template: **Browse** 
+        
+        Select the `packages` folder in your workspace.
 
-Tools calling is a powerful feature that allows your agent to perform specific tasks or access external data. In this step, we will add a tool to our agent that can use Bing Search to fetch real-time information. This will enable the agent to provide more accurate and up-to-date responses.
+    -  Input an MCP server name: **node-os-mcp**
 
-### Create a Bing Search resource
+       A new window will open with mcp-server template code.
 
-1. On the Azure portal, [create a bing resource](https://portal.azure.com/#create/Microsoft.BingGroundingSearch) (Grounding with Bing Search). Follow the prompts to create the resource. 
+        ![MCP server template](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/node-os-mcp-aitk.png?raw=true)
 
-2. Open the [AI Foundry portal](https://ai.azure.com/), navigate to the left navigation menu towards the bottom, select Management center.
+### Build the MCP server
 
-    ![Management Center](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/management-center.png?raw=true)
+At the root of the `node-os-mcp` folder, you will find a `package.json` file which contains the dependencies and scripts needed to run the MCP server.
 
-3. In the **Connected resources** section, select **+ New connection**.
+Run `npm install` to install the dependencies for the MCP server.
 
-4. In the Add a connection to external assets window, scroll to the **Knowledge section** and select **Grounding with Bing Search**.
+1. Open the `src/server.ts`. This is where you will define the tools that your agent will use. Replace the template code with the following:
 
-5. In the Connect a Grounding with Bing Search Account window, select **Add connection** next to your Grounding with Bing resource.
+    You will use the MCP Typescript SDK to create a server that exposes the tools you want to use. The SDK provides a set of APIs that allow you to define the tools, their inputs and outputs, and how they interact with the agent.
 
-    ![Add connection](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/add-connection.png?raw=true)
+    ```typescript
+    import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+    import * as os from "os";
+    ```
+    Create a new instance of the MCP server
 
-6. Once connected, click **close**
+    ```typescript
+    const server = new McpServer({
+        name: "node-os-mcp",
+        description: "A server that provides tools to get information about the operating system.",
+        version: "0.0.1",
+    });
+    ```
 
-### Add bing tool to your Agent
-With your `my-agent.agent.yaml` file open, click on the Foundry icon at the top right corner to open the Agent Designer.
-
-![Open Agent Designer](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/open-agent-designer.png?raw=true)
-
-On the `yaml` file, scroll down to the `tools` section and delete the empty array `[]`, then: -
-
-- Click **Enter** followed by **-** to invoke the YAML IntelliSense that will help you add a new tool configuration easily.
-
-  ![Open Agent Designer](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/new-tool-intellisense.png?raw=true)
-
-- Select the `Agent Tool - Bing Grounding` tool from the list of available built-in tools, and this will add the configuration for the Bing Search API tool to your agent configuration file.
-
-- To add the connection to the Bing resource you created earlier, type the **/** character after the **-** under **tool_connections**, and start typing `subscriptions`, and you'll see the IntelliSense kick in with your own subscription details. Select to complete the connection selection.
-
-  ![Subscription aware intelliSense](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/sub-intellisense.png?raw=true)
-
-  If the intelliSense fails, paste in the following
-  
-  `/subscriptions/<subscription_ID>/resourceGroups/<resource_group_name>/providers/Microsoft.MachineLearningServices/workspaces/<project_name>/connections/<bing_grounding_connection_name>`
-  
-  and replace the placeholders with your information:
-   - `subscription_ID` = Your Azure Subscription ID
-   - `resource_group_name` = Your Resource Group name
-   - `project_name` = Your Project name on AI Foundry
-   - `bing_grounding_connection_name` = The connection name **NOT** the bing resource name
-
-- A Bing Grounding connection should appear under the **Tool** section on the Agent Designer. Click on **Update Agent on Azure AI Foundry** to update your agent with the new tool configuration.
-
-Now that you've added the Bing Grounding to your agent, you can test it in the Playground. Open the "Agent Playground" and send the agent a message like _"What's the weather in Nairobi right now?"_ The agent should use the Bing Search API tool to fetch the current weather information and respond with a friendly message.
-
-![Weather with Bing](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/weather-with-bing.png?raw=true)
-
-
-## Step 4️⃣: Agent playground to Code
-
-The Agent Playground is a great way to test your agent's capabilities, but it's not the only way to interact with it. In this step, you will update our application to use the agent you just created.
-
-### Get Agent code
-Open the **Agent Playground** on the [AI Foundry portal](https://ai.azure.com/) and click on **View Code**. This will show you the code that is used to interact with the agent. 
-
-![View code](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/view-code.png?raw=true)
-
-Switch to the **JavaScript** tab, copy and paste the code into a new file called `agent.js` in the `packages/webapi` directory of your project. The code will already have the necessary setup for the agent, including your hard-coded connection string and agent ID.
-
-Run the code using `node agent.js` and you should see the output in the terminal.
-
-To send a message to the agent, you can update the `client.agents.createMessage` method to include the message you want to send. For example, you can replace the content with "Give me a summary of this year's Keynote at Microsoft Build" and run the code again. You should see the agent's response in the terminal.
-
-````javascript
-const message = await client.agents.createMessage(thread.id, {
-  role: "user",
-  content: "Give me a summary of this year's Keynote at Microsoft Build",
-});
-console.log(`Created message, message ID: ${message.id}`);
-````
-
-**Security Note 🔐**
- 
-The code you copied from the Playground contains your Azure credentials (connection string). Make sure to keep this information secure and do not share it with anyone. You can use environment variables or a secrets manager to store sensitive information securely.
-
-### Create an AgentService Module
-
-To implement Agent mode in your current application, you will create a new module called `agentService.js` in the `packages/webapi` directory that will encapsulate the agent functionality. This module will handle the interaction with the agent and provide methods to send messages and receive responses.
-
-
-<details> <summary>Click to expand the `agentService.js` code</summary>
-
-```javascript
-import { AIProjectsClient } from "@azure/ai-projects";
-import { DefaultAzureCredential } from "@azure/identity";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const agentThreads = {};
-
-export class AgentService {
-  constructor() {
-    this.client = AIProjectsClient.fromConnectionString(
-      "<YOUR_CONNECTION_STRING>",
-      new DefaultAzureCredential()
-    );
-    
-    // You can get the agent ID from your my-agent.agent.yaml file or the sample code
-    this.agentId = "<YOUR_AGENT_ID>";
-  }
-
-  async getOrCreateThread(sessionId) {
-    if (!agentThreads[sessionId]) {
-      const thread = await this.client.agents.createThread();
-      agentThreads[sessionId] = thread.id;
-      return thread.id;
-    }
-    return agentThreads[sessionId];
-  }
-
-  async processMessage(sessionId, message) {
-    try {
-      const threadId = await this.getOrCreateThread(sessionId);
-
-      const createdMessage = await this.client.agents.createMessage(threadId, {
-        role: "user",
-        content: message,
-      });
-
-      let run = await this.client.agents.createRun(threadId, this.agentId);
-      
-      while (run.status === "queued" || run.status === "in_progress") {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        run = await this.client.agents.getRun(threadId, run.id);
-      }
-      
-      if (run.status !== "completed") {
-        console.error(`Run failed with status: ${run.status}`);
-        return {
-          reply: `Sorry, I encountered an error (${run.status}). Please try again.`,
-        };
-      }
-      
-      const messages = await this.client.agents.listMessages(threadId);
-      
-      const assistantMessages = messages.data
-        .filter(msg => msg.role === "assistant")
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      
-      if (assistantMessages.length === 0) {
-        return { 
-          reply: "I don't have a response at this time. Please try again.",
-        };
-      }
-
-      let responseText = "";
-      for (const contentItem of assistantMessages[0].content) {
-        if (contentItem.type === "text") {
-          responseText += contentItem.text.value;
+    Define a `cpu_average_usage` tool that returns the average CPU usage of the system.
+
+    ```typescript
+    server.tool(
+    "cpu_average_usage",
+    "Get the average CPU usage percentage on the local machine",
+    {},
+    async () => {
+        // Calculate average CPU usage over 100ms
+        function cpuAverage() {
+        const cpus = os.cpus();
+        let totalIdle = 0, totalTick = 0;
+
+        for (const cpu of cpus) {
+            for (const type in cpu.times) {
+            totalTick += cpu.times[type as keyof typeof cpu.times];
+            }
+            totalIdle += cpu.times.idle;
         }
-      }
-      
-      return {
-        reply: responseText,
-      };
-    } catch (error) {
-      console.error("Agent error:", error);
-      return {
-        reply: "Sorry, I encountered an error processing your request. Please try again.",
-      };
+        return { idle: totalIdle / cpus.length, total: totalTick / cpus.length };
+        }
+
+        const start = cpuAverage();
+        await new Promise(res => setTimeout(res, 100));
+        const end = cpuAverage();
+
+        const idleDiff = end.idle - start.idle;
+        const totalDiff = end.total - start.total;
+        const usage = totalDiff > 0 ? (1 - idleDiff / totalDiff) * 100 : 0;
+
+        return {
+        content: [{
+            type: "text",
+            text: `Average CPU usage: ${usage.toFixed(2)}%`
+        }],
+        isError: false
+        };
     }
-  }
-}
-```
-</details>
+    );
+    ```
 
-### Update the server.js file
+    Define a `get_hostname` tool that returns the hostname of the system.
 
-Let's update the `server.js` file to use the new `AgentService` module. First, import the `AgentService` module at the top of the file
+    ```typescript
+    server.tool(
+    "get_hostname",
+    "Get the hostname of the local machine",
+    {},
+    async () => ({
+        content: [{
+        type: "text",
+        text: `Hostname: ${os.hostname()}`
+        }],
+        isError: false
+        })
+    );
+    ```
 
-```javascript
-import { AgentService } from "./agentService.js";
-```
-Right before the `app.post("/chat", ...)` route, create an instance of the `AgentService` class:
+    Define a `get_architecture` tool that returns the architecture of the system.
 
-```javascript
-const agentService = new AgentService();
-```
+    ```typescript
+    server.tool(
+    "get_architecture",
+    "Get the architecture of the local machine",
+    {},
+    async () => ({
+        content: [{
+        type: "text",
+        text: `Architecture: ${os.arch()}`
+        }],
+        isError: false
+        })
+    );
+    ```
 
-Inside the `try` block of the `/chat` route before `let sources = []`, add the following code to extract the mode from the request body and route to the agent service if the mode is set to "agent":
+    Define a `get_uptime` tool that returns the uptime of the system.
 
-```javascript
-const mode = req.body.mode || "basic";
+    ```typescript
+    server.tool(
+    "get_uptime",
+    "Get the uptime of the local machine in seconds",
+    {},
+    async () => ({
+        content: [{
+        type: "text",
+        text: `Uptime: ${os.uptime()} seconds`
+        }],
+        isError: false
+        })
+    );
+    ``` 
 
-// If agent mode is selected, route to agent service
-if (mode === "agent") {
-  const agentResponse = await agentService.processMessage(sessionId, userMessage);
-  return res.json({
-    reply: agentResponse.reply,
-    sources: []
-  });
-}
-```
+    Export the server instance to use it in the `index.ts` file.
 
-Restart your server.
+    ```typescript
+    export { server };
+    ```
+2. The code in `src/index.ts` is all set up to run the MCP server. 
 
-### Update Chat UI
+### Debug in the Agent Builder
 
-_You'll first update the UI, then implement the logic later. So don't worry if the changes don't work immediately._
+1. Open VS Code Debug panel. Select **Debug in Agent Builder** and press F5 to start debugging the MCP server.
 
-First, modify the ChatInterface class in `webapp/src/components/chat.js` Add a new property for mode (basic vs agent) 
+    ![Debug in Agent Builder](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/debug-in-agent-builder.png?raw=true)
 
-```javascript
-chatMode: { type: String } // Add new property for mode
-```
+    The MCP Server will be auto-connected to the Agent Builder. If you scroll down, to the **Tools** section, you will see the tools you defined in the MCP server.
 
-In the constructor, set the default mode to "basic":
+    ![OS Patrol tools](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/local-mcp-server.png?raw=true)
 
-```javascript
-this.chatMode = "basic"; // Set default mode to basic
-```
+2. Re-use the previous user prompt `What is my machine type` and click **Run** to test the AI Agent with the tools.
 
-In the render method, between the `Clear Chat button` and the `RAG-toggle component`, add a model-selector component. 
+    The Agent will determine which tool to use based on your prompt. In this case, it will use the `get_architecture` tool to get the machine type.
 
-```javascript
-<div class="mode-selector">
-  <label>Mode:</label>
-    <select @change=${this._handleModeChange}>
-      <option value="basic" ?selected=${this.chatMode === 'basic'}>Basic AI</option>
-      <option value="agent" ?selected=${this.chatMode === 'agent'}>Agent</option>
-    </select>
-</div>
-```
+    ![OS Patrol response with tools](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/os-patrol-with-tools.png?raw=true)
 
-![Switch modes](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/switch-modes.png?raw=true)
+3. To simulate a natural conversation maintaining the context, click on the **Add to Prompts** button under the Model Response to add the response from the agent as an **Assistant prompt**. Now, when you run the agent again, or with a new user prompt, the previous response will be included in the prompt and the model will reference it as conversation history.
 
-Update the `RAG toggle` to be disabled when the mode is set to "agent". 
-
-
-```javascript
-<label class="rag-toggle ${this.chatMode === 'agent' ? 'disabled' : ''}">
-  <input type="checkbox" 
-    ?checked=${this.ragEnabled} 
-    @change=${this._toggleRag}
-    ?disabled=${this.chatMode === 'agent'}>
-Use Employee Handbook
-</label>
-```
-
-![Disable RAG toggle in Agent mode](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/disable-rag-toggle.png?raw=true)
-
-Let's make the placeholder text conditional based on the selected mode, by updating the _chat-input_ component in the render method:
-
-```javascript
-<input 
-  type="text" 
-  placeholder=${this.chatMode === 'basic' ? 
-    "Ask about company policies, benefits, etc..." : 
-    "Ask Agent"}
-  .value=${this.inputMessage}
-  @input=${this._handleInput}
-  @keyup=${this._handleKeyUp}
-/>
-```
-
-![Agent mode placeholder text](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/ask-agent.png?raw=true)
-
-and the message sender display to show **Agent** instead of **AI** when the mode is set to 'agent'. Update the _chat-message_ component 
-
-```javascript
-<span class="message-sender">${message.role === 'user' ? 'You' : (this.chatMode === 'agent' ? 'Agent' : 'AI')}</span>
-```
-
-![Agent mode placeholder](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/agent.png?raw=true)
-
-Add a new method `_handleModeChange` to handle the mode change event after the render method:
-
-```javascript
-_handleModeChange(e) {
-  const newMode = e.target.value;
-  if (newMode !== this.chatMode) {
-    this.chatMode = newMode;
-    
-    // Disable RAG when switching to agent mode
-    if (newMode === 'agent') {
-      this.ragEnabled = false;
-    }
-    
-    clearMessages();
-    this.messages = [];
-  }
-}
-```
-
-Update the `_apiCall` method to send the selected mode to the server:
-
-```javascript
-async _apiCall(message) {
-  const res = await fetch("http://localhost:3001/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
-      message,
-      useRAG: this.ragEnabled,
-      mode: this.chatMode // Send the selected mode to the server
-    }),
-  });
-  const data = await res.json();
-  return data;
-}
-```
-
-Let's improve the styling of the mode selector. Add the following CSS to `webapp/src/components/chat.css` after `.rag-toggle` styles:
-
-```css
-.mode-selector {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1rem;
-  background: rgba(50,50,50,0.5);
-  padding: 6px 12px;
-  border-radius: 18px;
-  margin-right: auto;
-}
-
-.mode-selector label {
-  color: #e0e0e0;
-  white-space: nowrap;
-}
-
-.mode-selector select {
-  background: #18191a;
-  color: #fff;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 4px 8px;
-  font-size: 0.9rem;
-  outline: none;
-}
-
-.mode-selector select:focus {
-  border-color: #1e90ff;
-}
-
-.rag-toggle.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.rag-toggle.disabled input[type="checkbox"] {
-  cursor: not-allowed;
-}
-```
-
-### Test Agent Mode in the app
-
-In the terminal, navigate to the `packages/webapi` directory and run `npm start` to start the server. In another terminal, navigate to the `packages/webapp` directory and run `npm run dev` to start the web application. 
-
-On the app, select the **Agent** mode from the dropdown. Type a message in the input box and hit enter. The agent should respond with a friendly message.
-
-If you ask the agent a question that requires real-time information, such as _"What's the current weather in Spain?"_, the agent should ground its response using the Bing Search API and provide you with the latest information.
-
-![Weather in Spain in Agent mode](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/weather-in-spain.png?raw=true)
+    ![Add to prompts](https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/assets/jsai-buildathon-assets/os-summary-response.png?raw=true)
 
 
-## ✅ Activity: Push your updated code to the repository
+## ✅ Activity: Push your mcp server code to the repository
 
 ### Quest Checklist
 
@@ -488,14 +251,13 @@ To complete this quest and **AUTOMATICALLY UPDATE** your progress, you MUST push
 
 **Checklist**
 
-- [ ] Ensure your agent configuration file is added to `.gitignore` to prevent it from being committed. DON'T PUSH IT TO THE REPOSITORY.
-- [ ] Have an `agentService.js` file in the `packages/webapi` directory 
+- [ ] Have a `node-os-mcp` folder in the packages directory
 
 1. In the terminal, run the following commands to add, commit, and push your changes to the repository:
 
     ```bash
     git add .
-    git commit -m "Added agent mode"
+    git commit -m "Added os mcp server"
     git push
     ```
 2.  After pushing your changes, **WAIT ABOUT 15 SECONDS FOR GITHUB ACTIONS TO UPDATE YOUR README**.
@@ -506,10 +268,9 @@ To complete this quest and **AUTOMATICALLY UPDATE** your progress, you MUST push
 
 ## 📚 Further Reading
 
-Here are some additional resources to help you learn more about building AI agents and extending their capabilities with tools:
-- [Azure AI Agents JavaScript examples](https://github.com/Azure-Samples/azure-ai-agents-javascript)
-- [Your First AI Agent in JS with Azure AI Agent Service](https://www.youtube.com/live/RNphlRKvmJQ?si=I3rUp-LmnvS008ym)
-- [Create a new Agent - JS/TS](https://learn.microsoft.com/en-us/azure/ai-services/agents/quickstart?pivots=programming-language-javascript)
-- [📹 DEMFP781: From Prompt to Product: Build an AI Agent That Generates UI](https://build.microsoft.com/en-US/sessions/DEMFP781?source=sessions)
+Here are some additional resources to help you learn more about the Model Context Protocol (MCP) and how to use it with the AI Toolkit extension for Visual Studio Code:
+
+- [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
+- [Build agents and prompts in AI Toolkit](https://code.visualstudio.com/docs/intelligentapps/agentbuilder)
 
 
