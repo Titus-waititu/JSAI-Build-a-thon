@@ -43,11 +43,13 @@ export class AgentService {
         }
       );
 
-      let run = await this.client.agents.createRun(threadId, this.agentId);
+      let run = await this.client.agents.runs.create(threadId, {
+        assistantId: this.agentId,
+      });
 
       while (run.status === "queued" || run.status === "in_progress") {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        run = await this.client.agents.getRun(threadId, run.id);
+        run = await this.client.agents.runs.retrieve(threadId, run.id);
       }
 
       if (run.status !== "completed") {
@@ -57,7 +59,7 @@ export class AgentService {
         };
       }
 
-      const messages = await this.client.agents.listMessages(threadId);
+      const messages = await this.client.agents.messages.list(threadId);
 
       const assistantMessages = messages.data
         .filter((msg) => msg.role === "assistant")

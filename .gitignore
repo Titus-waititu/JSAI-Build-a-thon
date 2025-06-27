@@ -404,3 +404,7 @@ FodyWeavers.xsd
 # Environment variables
 .env
 .azure
+
+genaiscript.d.ts
+tsconfig.json
+jsconfig.json
