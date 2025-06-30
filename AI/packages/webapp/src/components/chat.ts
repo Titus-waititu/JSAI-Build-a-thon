@@ -39,34 +39,43 @@ export const chatDefaultOptions: ChatComponentOptions = {
   apiUrl: '',
   enablePromptSuggestions: true,
   promptSuggestions: [
-    'How to search and book rentals?',
-    'What is the refund policy?',
-    'How to contact a representative?',
+    'What online courses are available in Computer Science?',
+    'Show me degree requirements for Business Administration',
+    'Which courses can I take to complete my Engineering cluster?',
+    'What prerequisites do I need for Data Science courses?',
+    'Help me plan my academic pathway for Healthcare Management',
   ],
   messages: [],
   strings: {
-    promptSuggestionsTitle: 'Ask anything or try an example',
-    citationsTitle: 'Citations:',
-    followUpQuestionsTitle: 'Follow-up questions:',
-    chatInputPlaceholder: 'Ask me anything...',
-    chatInputButtonLabel: 'Send question',
-    assistant: 'Support Assistant',
-    user: 'You',
-    errorMessage: 'We are currently experiencing an issue.',
-    newChatButton: 'New chat',
-    retryButton: 'Retry',
+    promptSuggestionsTitle: 'Explore degree programs and course requirements',
+    citationsTitle: 'Course References:',
+    followUpQuestionsTitle: 'Related course questions:',
+    chatInputPlaceholder: 'Ask about courses, requirements, or degree planning...',
+    chatInputButtonLabel: 'Search courses',
+    assistant: 'Academic Advisor',
+    user: 'Student',
+    errorMessage: 'Unable to access course information right now.',
+    newChatButton: 'New consultation',
+    retryButton: 'Try again',
   },
 };
 
 /**
- * A chat component that allows the user to ask questions and get answers from an API.
- * The component also displays default prompts that the user can click on to ask a question.
- * The component is built as a custom element that extends LitElement.
+ * An academic advisory chat component that helps students find online courses and understand degree requirements.
+ * The component provides intelligent course recommendations, prerequisite information, and academic pathway planning.
+ * It integrates with degree cluster documents to provide accurate course information and requirements.
  *
- * Labels and other aspects are configurable via the `option` property.
+ * Features:
+ * - Course search and discovery
+ * - Degree requirement analysis
+ * - Academic pathway planning
+ * - Prerequisite checking
+ * - Personalized course recommendations
+ *
  * @element azc-chat
  * @fires messagesUpdated - Fired when the message thread is updated
  * @fires stateChanged - Fired when the state of the component changes
+ * @fires courseSelected - Fired when a student selects a course
  * */
 @customElement('azc-chat')
 export class ChatComponent extends LitElement {
@@ -166,6 +175,14 @@ export class ChatComponent extends LitElement {
       this.isStreaming = false;
       console.error(error);
     }
+  }
+
+  onCourseSelected(courseCode: string, courseName: string) {
+    const courseSelectedEvent = new CustomEvent('courseSelected', {
+      detail: { courseCode, courseName },
+      bubbles: true,
+    });
+    this.dispatchEvent(courseSelectedEvent);
   }
 
   override requestUpdate(name?: string, oldValue?: any) {
@@ -360,22 +377,27 @@ export class ChatComponent extends LitElement {
 
   static override styles = css`
     :host {
-      /* Base properties */
-      --primary: var(--azc-primary, #07f);
-      --error: var(--azc-error, #e30);
-      --text-color: var(--azc-text-color, #000);
+      /* Base properties - Academic theme */
+      --primary: var(--azc-primary, #1e40af); /* Academic blue */
+      --error: var(--azc-error, #dc2626); /* Red for errors */
+      --text-color: var(--azc-text-color, #1f2937); /* Dark gray for readability */
       --text-invert-color: var(--azc--text-invert-color, #fff);
-      --disabled-color: var(--azc-disabled-color, #ccc);
-      --bg: var(--azc-bg, #eee);
+      --disabled-color: var(--azc-disabled-color, #9ca3af);
+      --bg: var(--azc-bg, #f8fafc); /* Light academic background */
       --card-bg: var(--azc-card-bg, #fff);
-      --card-shadow: var(--azc-card-shadow, 0 0.3px 0.9px rgba(0 0 0 / 12%), 0 1.6px 3.6px rgba(0 0 0 / 16%));
+      --card-shadow: var(--azc-card-shadow, 0 1px 3px rgba(0 0 0 / 12%), 0 1px 2px rgba(0 0 0 / 24%));
       --space-md: var(--azc-space-md, 12px);
       --space-xl: var(--azc-space-xl, calc(var(--space-md) * 2));
       --space-xs: var(--azc-space-xs, calc(var(--space-md) / 2));
       --space-xxs: var(--azc-space-xs, calc(var(--space-md) / 4));
-      --border-radius: var(--azc-border-radius, 16px);
+      --border-radius: var(--azc-border-radius, 12px); /* Softer corners */
       --focus-outline: var(--azc-focus-outline, 2px solid);
       --overlay-color: var(--azc-overlay-color, rgba(0 0 0 / 40%));
+
+      /* Academic-specific colors */
+      --academic-accent: var(--azc-academic-accent, #3b82f6); /* Bright blue for highlights */
+      --academic-success: var(--azc-academic-success, #10b981); /* Green for success */
+      --academic-warning: var(--azc-academic-warning, #f59e0b); /* Orange for warnings */
 
       /* Component-specific properties */
       --error-color: var(--azc-error-color, var(--error));

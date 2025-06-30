@@ -1,0 +1,25 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    
+    "_comment_azure": "Replace these with your actual Azure credentials",
+    "AZURE_OPENAI_API_ENDPOINT": "https://your-openai-resource.openai.azure.com/",
+    "AZURE_OPENAI_API_KEY": "your-azure-openai-api-key",
+    "AZURE_OPENAI_API_DEPLOYMENT_NAME": "your-chat-deployment-name",
+    "AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME": "your-embeddings-deployment-name",
+    
+    "_comment_cosmosdb": "For chat history and vector storage",
+    "AZURE_COSMOSDB_NOSQL_ENDPOINT": "https://your-cosmos-account.documents.azure.com:443/",
+    
+    "_comment_storage": "For document storage",
+    "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=yourstorageaccount;AccountKey=yourkey;EndpointSuffix=core.windows.net",
+    "AZURE_STORAGE_CONTAINER_NAME": "academic-documents",
+    
+    "_comment_local": "For local development without Azure (uses Ollama)",
+    "_AZURE_OPENAI_API_ENDPOINT": "",
+    "_AZURE_COSMOSDB_NOSQL_ENDPOINT": "",
+    "_AZURE_STORAGE_CONNECTION_STRING": ""
+  }
+}
