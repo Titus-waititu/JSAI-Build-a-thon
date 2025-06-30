@@ -10,9 +10,23 @@ permissions:
   issues: write
 
 jobs:
+  get_current_step:
+    name: Check current step number
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - id: get_step
+        run: echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
+    outputs:
+      current_step: ${{ steps.get_step.outputs.current_step }}
+
   update_step_on_complete_quest:
-    if: |
-      github.event.issue.title == 'Quest: I want a Production-Ready Template to customize'
+    needs: get_current_step
+    if: >-
+      ${{ !github.event.repository.is_template &&
+          needs.get_current_step.outputs.current_step == '9' &&
+          github.event.issue.title == 'Quest: I want a Production-Ready Template to customize' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
